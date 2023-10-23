@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Tarefa } from '../../models/Tarefa'
+import { Contato, Tarefa } from '../../models/Tarefa'
 import * as enums from '../../utils/enums/Tarefa'
 
 type TarefasState = {
@@ -10,43 +10,34 @@ type TarefasState = {
 const initialState: TarefasState = {
   Itens: [
     {
-      Titulo: 'Parceiro do TCC',
-      tipoContato: enums.tipoContato.FACULDADE,
-      Contatos:
-        'Gabriel Nascimento Souza\ngabrielnascimento@gmail.com\n(13)12345-6789',
+      Titulo: 'Contato do meu Personal Trainer',
+      tipoContato: enums.tipoContato.ACEDEMIA,
+      Contatos: new Contato(
+        'Fernando Nascimento',
+        'fernandonascimento@gmail.com',
+        '(13) 99999-9999'
+      ),
       id: 1
     },
     {
-      Titulo: 'Contato do meu chefe',
-      tipoContato: enums.tipoContato.TRABALHO,
-      Contatos: 'Robson Cleiton Rodrigues\nCleitin@gmail.com\n(13) 05732-8572',
+      Titulo: 'Parceiro do TCC',
+      tipoContato: enums.tipoContato.FACULDADE,
+      Contatos: new Contato(
+        'Rodrigo Rodrigues da Silva',
+        'rodrigorogrigues@gmail.com',
+        '(13) 98537-3516'
+      ),
       id: 2
     },
     {
-      Titulo: 'Meu Irmao de Farda',
-      tipoContato: enums.tipoContato.AMIGOS,
-      Contatos: 'Caio Pereira Teixiera\ncaio@gmail.com\n(13)64534-5412',
+      Titulo: 'Contato da minha Mãe',
+      tipoContato: enums.tipoContato.FAMILIA,
+      Contatos: new Contato(
+        'Gabriela Da Silva',
+        'gabrieladasilva@gmail.com',
+        '(13) 98142-1465'
+      ),
       id: 3
-    },
-    {
-      Titulo: 'Contato do meu Pai',
-      tipoContato: enums.tipoContato.FAMILIA,
-      Contatos:
-        'Fernando Nascimento Souza\nfernandonascimento@gmail.com\n(13)12345-6789',
-      id: 4
-    },
-    {
-      Titulo: 'Contato da minha mãe',
-      tipoContato: enums.tipoContato.FAMILIA,
-      Contatos:
-        'Gabriela SIlva Almeida\ngabrielasilva@gmail.com\n(13) 99999-9999',
-      id: 5
-    },
-    {
-      Titulo: 'Contato do meu Personal Trainer',
-      tipoContato: enums.tipoContato.ACEDEMIA,
-      Contatos: 'Richard Oliveira Silva\nrichies@gmail.com\n(13) 96978-8265',
-      id: 6
     }
   ]
 }
@@ -66,17 +57,26 @@ const tarefasSlice = createSlice({
         state.Itens[IndexTarefa] = action.payload
       }
     },
-    adicionar(state, action: PayloadAction<Omit<Tarefa, 'id'>>) {
-      const tarefaExiste = state.Itens.find(
+    adicionar(
+      state,
+      action: PayloadAction<
+        Omit<Tarefa, 'id'> & {
+          Titulo: string
+          tipoContato: enums.tipoContato
+          Contatos: Contato
+        }
+      >
+    ) {
+      const tarefaExistente = state.Itens.find(
         (tarefa) =>
           tarefa.Titulo.toLowerCase() === action.payload.Titulo.toLowerCase()
       )
-      if (tarefaExiste) {
-        alert('essa tarefa já existe!')
+      if (tarefaExistente) {
+        alert('Essa tarefa já existe!')
       } else {
         const ultimaTarefa = state.Itens[state.Itens.length - 1]
 
-        const novaTarefa = {
+        const novaTarefa: Tarefa = {
           ...action.payload,
           id: ultimaTarefa ? ultimaTarefa.id + 1 : 1
         }
