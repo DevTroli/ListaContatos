@@ -70,7 +70,7 @@ const NovaTarefa = () => {
           <Campo
             value={contato.telefoneContato}
             onChange={mudaCampo('telefoneContato')}
-            type="tel"
+            type="number"
             placeholder="Telefone"
           />
         </FieldWrapper>
